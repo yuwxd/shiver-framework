@@ -284,7 +284,8 @@ All options are merged with `DEFAULT_OPTIONS`. Deep merge is applied so you can 
 |--------|------|---------|-------------|
 | `storage.backend` | `string` | `'json'` | One of: `json`, `memory`, `mongo`, `supabase`, `sqlite`. |
 | `storage.path` | `string` | `'./data'` | For JSON: directory or file path. For others: connection/config. |
-| `storage.filePath` | `string` | — | JSON adapter: explicit file path (overrides `path` when set). |
+| `storage.filePath` | `string` | - | JSON adapter: explicit file path (overrides `path` when set). |
+| `migrationsPath` | `string \| null` | `null` | Directory containing migration files (e.g. `001_add_users.js`). If `null` or path missing, no migrations run. Used by `framework.migrations.run()` to evolve storage schema or data safely. |
 | `settings.defaults.guild` | `object` | `{}` | Default guild settings. |
 | `settings.defaults.user` | `object` | `{}` | Default user settings. |
 
@@ -317,7 +318,7 @@ All options are merged with `DEFAULT_OPTIONS`. Deep merge is applied so you can 
 | `onCommandRun` | `function \| null` | `null` | `(interaction \| message, commandName) => void \| Promise`. After successful command run. |
 | `onCommandBlocked` | `function \| null` | `null` | `(interaction \| message, commandName) => void`. When middleware/preconditions block. |
 | `onCommandError` | `function \| null` | `null` | `(interaction \| message, commandName, error) => void`. When command throws. |
-| `tryAcquirePrefixMessage` | `function \| null` | — | `async (messageId) => boolean`. Return `true` to run prefix command (e.g. Redis SET NX); `false` to skip. |
+| `tryAcquirePrefixMessage` | `function \| null` | `null` | `async (messageId) => boolean`. Called before running a prefix command; return `true` to allow execution, `false` to skip. Use e.g. Redis SET NX so only one process handles each message when multiple bot instances run. |
 
 ### 6.8 Assets, voice, execute, monetization, i18n
 

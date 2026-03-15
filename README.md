@@ -8,9 +8,9 @@
 
 **Full documentation (web):** [shiver.one/framework](https://shiver.one/framework)
 
-Shiver Framework powers **[Shiver](https://shiver.one)** — the same framework the Shiver bot is built on. It was created to make it easy for other developers to build their own Discord bots with the same solid foundation: command loading, slash and prefix, middleware, storage, and production-ready defaults. You get full control over your bot logic while the framework handles infrastructure, safety, and performance.
+Shiver Framework powers **[Shiver](https://shiver.one)** - the same framework the Shiver bot is built on. It was created to make it easy for other developers to build their own Discord bots with the same solid foundation: command loading, slash and prefix, middleware, storage, and production-ready defaults. You get full control over your bot logic while the framework handles infrastructure, safety, and performance.
 
-Shiver Framework gives you the **foundation**—command loading and dispatch, slash and prefix handling, middleware, storage, settings, health endpoints, and safe response handling—without imposing a specific bot design. You keep full control over discord.js types and your app logic; the framework stays a thin, predictable layer optimized for speed and production.
+Shiver Framework gives you the **foundation**-command loading and dispatch, slash and prefix handling, middleware, storage, settings, health endpoints, and safe response handling-without imposing a specific bot design. You keep full control over discord.js types and your app logic; the framework stays a thin, predictable layer optimized for speed and production.
 
 ---
 
@@ -45,6 +45,7 @@ Shiver Framework gives you the **foundation**—command loading and dispatch, sl
 | `@discordjs/voice` + `prism-media` | Voice channels |
 | `@supabase/supabase-js` | Supabase storage backend |
 | `better-sqlite3` | SQLite storage backend |
+| `mongodb` | MongoDB storage backend |
 
 ---
 
@@ -98,7 +99,7 @@ async function main() {
 main().catch(console.error);
 ```
 
-**Example command** — `src/commands/ping.js`:
+**Example command** - `src/commands/ping.js`:
 
 ```js
 const { SlashCommandBuilder } = require('discord.js');
@@ -110,10 +111,10 @@ module.exports = {
         .setName('ping')
         .setDescription('Check bot latency'),
     async executeSlash(interaction, client) {
-        await interaction.editReply({ content: `Pong — ${client.ws.ping}ms` });
+        await interaction.editReply({ content: `Pong - ${client.ws.ping}ms` });
     },
     async executePrefix(message, args, client) {
-        await message.reply(`Pong — ${client.ws.ping}ms`);
+        await message.reply(`Pong - ${client.ws.ping}ms`);
     }
 };
 ```
@@ -124,14 +125,14 @@ Slash commands are deferred by default; use `interaction.editReply()` in `execut
 
 ## Features
 
-- **Unified command model** — One file per command. Slash, prefix, context menu, and autocomplete in a single module. No class boilerplate; plain objects with `name`, `data`, `executeSlash`, `executePrefix`.
-- **Fast dispatch** — In-memory command lookup, event and prefix deduplication, optional Redis-based cross-process locking so only one instance handles each message.
-- **Multi-instance awareness** — Optional Redis heartbeat; when multiple bot processes run, the framework logs a clear warning and a suggested `pkill` so you can stop all and restart once.
-- **Production defaults** — REST retries, gateway compression, cache limits and sweepers, optional HTTP health server (`/health`, `/ready`, `/live`, `/metrics`) and custom routes via `health.addRoute()`.
-- **Safe responses** — Central `safeRespond`, defer strategies, and safe message edit/delete with benign-error handling and optional debounce to avoid rate limits.
-- **Pluggable storage** — JSON by default; swap in Supabase, SQLite, or other backends. Settings and migrations on top.
-- **Minimal abstraction** — You work with discord.js types; the framework adds thin wrappers and leaves you in control. No lock-in to a specific UI style (Components v2, embeds, or plain text—your choice).
-- **Extensibility** — Plugin system, event bus, DI container, middleware chain. Optional voice, code execution, monetization, moderation API, anti-crash, and sharding support.
+- **Unified command model** - One file per command. Slash, prefix, context menu, and autocomplete in a single module. No class boilerplate; plain objects with `name`, `data`, `executeSlash`, `executePrefix`.
+- **Fast dispatch** - In-memory command lookup, event and prefix deduplication, optional Redis-based cross-process locking so only one instance handles each message.
+- **Multi-instance awareness** - Optional Redis heartbeat; when multiple bot processes run, the framework logs a clear warning and a suggested `pkill` so you can stop all and restart once.
+- **Production defaults** - REST retries, gateway compression, cache limits and sweepers, optional HTTP health server (`/health`, `/ready`, `/live`, `/metrics`) and custom routes via `health.addRoute()`.
+- **Safe responses** - Central `safeRespond`, defer strategies, and safe message edit/delete with benign-error handling and optional debounce to avoid rate limits.
+- **Pluggable storage** - JSON by default; swap in Supabase, SQLite, or other backends. Settings and migrations on top.
+- **Minimal abstraction** - You work with discord.js types; the framework adds thin wrappers and leaves you in control. No lock-in to a specific UI style (Components v2, embeds, or plain text-your choice).
+- **Extensibility** - Plugin system, event bus, DI container, middleware chain. Optional voice, code execution, monetization, moderation API, anti-crash, and sharding support.
 
 ---
 
@@ -161,12 +162,13 @@ Options are deep-merged with defaults. Key areas:
 
 - **Core:** `commandsPath`, `prefix`, `getPrefix`, `ownerIds`, `deferStrategy`, `ephemeralByDefault`, `componentCollectorTimeoutMs`, `debug`, `dryRun`.
 - **Guards:** `isBlacklisted`, `checkServerBlacklisted`, `checkTOS`, `buildTosReply`, `moderation.checkRoleHierarchy`.
-- **Storage:** `storage.backend` (`json`, `memory`, `supabase`, `sqlite`, …), `storage.path`, `settings.defaults`.
+- **Storage:** `storage.backend` (`json`, `memory`, `supabase`, `sqlite`, `mongodb`), `storage.path`, `settings.defaults`, `migrationsPath`.
 - **Health:** `health.enabled`, `health.port`, `health.addRoute(method, path, handler)` for custom API routes.
 - **Slash sync:** `slashSync.guildIds`, `registration.retryOnRateLimit`, `registration.maxRetries`.
 - **Hooks:** `afterReady`, `afterSlashSync`, `onCommandRun`, `onCommandError`, `onCommandBlocked`.
+- **Prefix dedup:** `tryAcquirePrefixMessage` - optional async function (e.g. Redis SET NX) so only one process handles each prefix message when multiple instances run.
 
-The full option reference is in **[docs/DOCS.md](docs/DOCS.md)**.
+All options and full reference are on **[shiver.one/framework](https://shiver.one/framework)**.
 
 ---
 
@@ -192,24 +194,7 @@ Run from a project that depends on the framework (or from the framework director
 
 ## Documentation
 
-- **Full documentation (web):** [**shiver.one/framework**](https://shiver.one/framework) — readable in the browser, same content as this README and the in-repo reference. Use the web docs or the repo; both are kept in sync.
-- **In-repo reference:** [docs/DOCS.md](docs/DOCS.md) — full option reference and detailed guides.
-
-Both cover:
-
-- Configuration and all options  
-- Command system (registry, slash, prefix, context menu, autocomplete, component handlers)  
-- Middleware and preconditions  
-- Handlers and response safety (safeRespond, safeEdit, safeDelete, MessageEditDeleteHelper)  
-- Storage, settings, assets, migrations  
-- Components v2, modals, pagination, confirmation  
-- Reload, debug, stats, health, custom API routes  
-- Lifecycle, multi-instance detection, shutdown  
-- Voice, code execution, monetization  
-- Moderation, anti-crash, sharding  
-- Plugins, events, container  
-- CLI and testing  
-- Security, AI-friendly guidelines, examples  
+All documentation is on **[shiver.one/framework](https://shiver.one/framework)**. There you will find the full option reference, configuration, command system (registry, slash, prefix, context menu, autocomplete, component handlers), middleware and preconditions, handlers and response safety (safeRespond, safeEdit, safeDelete, MessageEditDeleteHelper), storage and settings (including `migrationsPath` and migrations), assets, Components v2, modals, pagination, confirmation, reload, debug, stats, health and custom API routes, lifecycle and multi-instance detection, shutdown, voice, code execution, monetization, moderation, anti-crash, sharding, events and container, CLI, testing, security, AI-friendly guidelines, and examples. Run tests with `npm test`.
 
 ---
 

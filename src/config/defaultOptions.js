@@ -92,6 +92,8 @@ const DEFAULT_OPTIONS = {
     slashSync: {
         guildIds: null
     },
+    migrationsPath: null,
+    tryAcquirePrefixMessage: null,
     checkTOS: null,
     hasAccess: null,
     isBlacklisted: null,
