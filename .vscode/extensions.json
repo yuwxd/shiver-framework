@@ -1,0 +1,25 @@
+{
+  "recommendations": [
+    "LeonardSSH.vscord",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "usernamehw.errorlens",
+    "PKief.material-icon-theme",
+    "oderwat.indent-rainbow",
+    "aaron-bond.better-comments",
+    "christian-kohler.path-intellisense",
+    "wix.vscode-import-cost",
+    "eamodio.gitlens",
+    "mikestead.dotenv-refresh",
+    "xabikos.JavaScriptSnippets",
+    "wayou.vscode-todo-highlight",
+    "formulahendry.auto-rename-tag",
+    "naumovs.color-highlight",
+    "streetsidesoftware.code-spell-checker",
+    "shardulm94.vscode-background",
+    "johnpapa.vscode-peacock",
+    "binaryify.one-dark-pro",
+    "ms-vscode.vscode-js-debug"
+  ],
+  "unwantedRecommendations": []
+}

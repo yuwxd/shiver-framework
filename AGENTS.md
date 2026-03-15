@@ -1,0 +1,52 @@
+## Learned User Preferences
+
+- Always respond to the user in Polish; use English for all code, variable names, function names, and file names.
+- Never add code comments — code must be self-explanatory through naming and structure.
+- All functions must be async/await; never use .then() or callbacks.
+- All new commands must use Components v2 (buildMessageContainerV2) with MessageFlags.IsComponentsV2; never use EmbedBuilder for command output.
+- Use "> **▸ Title**" and "> From **X** to **Y**" style text in container content; never use arrow characters (→).
+- Colors must always come from /settings (embedHelper.getCommandEmbedColor); never hardcode colors.
+- Errors must always use Helpers.createGenericErrorPayload or Helpers.createWarningPayload; never show raw errors or stack traces to users.
+- All sensitive or private replies must be ephemeral (MessageFlags.Ephemeral).
+- No changelog files; never create or update changelogs.
+- No templates; never add template files.
+- Always finish work completely without stopping to ask "should I continue?".
+- All attachment filenames must use the format shiver.(extension) (e.g. shiver.png, shiver.mp3); for multiple files use shiver_1.png, shiver_2.png.
+- Every new command entry in commands-list.json must also have a corresponding entry in helpDescriptions.js.
+- Each subcommand must appear as a separate entry in the commands list (e.g. /report bug, /report user).
+- Defer slow slash commands (deferReply) at the start before any await that might take time.
+- Let errors bubble to the central handler so API key issues are reported to the API_KEY_ERROR_WEBHOOK_URL webhook.
+- When modifying website/ folder, always push changes to the shiver.one GitHub repo at the end of the task.
+- The user wants the Shiver Framework to be a fully separate project/library from the bot (two separate projects); framework must not contain bot-specific business logic.
+- The user wants the framework to be implemented in a separate folder (e.g. shiver-framework/) and linked locally via package.json file: path.
+- The user prefers Polish communication but all code/filenames/variables in English.
+- When implementing the Shiver Framework, follow the plan at /home/yuw/.cursor/plans/shiver_framework_full_ca3f6946.plan.md exactly, executing phases 1–39 in order.
+- The user wants everything configurable and optional — no hardcoded behavior that cannot be turned off.
+- The user wants the framework to be compatible 1:1 with existing bot command files (same export format: data, name, aliases, executeSlash, executePrefix, handleButton, etc.) without requiring changes to command files.
+
+## Learned Workspace Facts
+
+- Project is a Discord bot called "shiver" (shiverxdd) built with Node.js, discord.js, and the Sapphire framework.
+- Bot uses legacy slash commands and prefix commands loaded from src/commands/.
+- Command format: module.exports = { data: SlashCommandBuilder, name, aliases, executeSlash(interaction, client), executePrefix(message, args, client, commandName), optionally handleButton/handleSelect/etc. }.
+- Bot uses @sapphire/pieces container for dependency injection: container.set('logger', ...), container.get('premium'), etc.
+- Bot has systems: BlacklistSystem, PremiumSystem, LockdownSystem, ServerListSystem, DisabledCommandsSystem, RateLimitSystem, EcoSystem, BottingSystem, RefcodeSystem, CryptoPaymentSystem, MusicManager (Shoukaku/Lavalink).
+- Bot uses Supabase and/or MongoDB for storage (mongo.js with Supabase fallback).
+- Bot prefix is comma (,); slash commands registered globally.
+- Bot uses Components v2 (ContainerBuilder, SectionBuilder, SeparatorBuilder, TextDisplayBuilder) from discord.js.
+- containerStyle module provides buildMessageContainerV2(accentColor, content) for consistent output.
+- Helpers module provides createWarningPayload and createGenericErrorPayload for user-facing errors.
+- embedHelper provides getCommandEmbedColor(userId) for per-user color settings.
+- Bot has a stats server (statsServer.js) and ping manager (pingManager.js).
+- Bot has webhook logging for commands, errors, and blocked commands (webhookConfig).
+- Bot has API key error webhook reporting (apiKeyErrorWebhook.js).
+- The Shiver Framework plan is at /home/yuw/.cursor/plans/shiver_framework_full_ca3f6946.plan.md (2114 lines, phases 1–39, parts A–AJ, DOCS sections 1–63).
+- Framework should be created in /home/yuw/Downloads/shiver-framework/ (separate from shiverxdd bot).
+- Framework must support: Container (set/get/has/clear), EventBus, ShiverClient (extends discord.js Client), CommandRegistry (loadFromDirectory, syncToDiscord diff-based), handlers (Slash, Prefix, Interaction, Autocomplete, ContextMenu), middleware chain (Defer, Lockdown, Blacklist, TOS, Premium, RateLimit, Disabled, Permissions), Components v2 builders, safe* helpers, storage adapters, settings, migrations, moderation API, plugins, optimizations, lifecycle, stats, error handling with traceId, message events, resolvers, args, listeners, customizability, monetization, execute sandbox, and full AJ compatibility hooks (afterPrefixMessage, afterSlashSync, afterReady, CommandRun/Blocked/Error events, getDisabledPath, buildPath/isDisabled).
+- Discord.js version used in shiverxdd: check package.json for exact version.
+- Bot Node.js requirement: >=18.
+- Shiver Framework implementation status: COMPLETE (all phases 1-39 implemented).
+- Framework files: src/index.js (main), src/core/, src/handlers/, src/middleware/, src/components/, src/cache/, src/storage/, src/settings/, src/migrations/, src/voice/, src/moderation/, src/validation/, src/errors/, src/security/, src/plugins/ (11 built-in), src/optimizations/, src/lifecycle/, src/stats/, src/events/, src/resolvers/, src/args/, src/listeners/, src/presence/, src/reload/, src/execute/, src/monetization/, src/testing/, src/sharding/, src/utils/, docs/DOCS.md (63 sections).
+- Framework loads cleanly: node -e "require('./src/index.js')" returns no errors.
+- All middleware implemented: Defer, Lockdown, ServerBlacklist, Blacklist, TOS, Premium, RateLimit, Cooldown, Disabled, Permissions.
+- AJ compatibility: getDisabledPath, buildPath/isDisabled, afterPrefixMessage, afterSlashSync, afterReady, CommandRun/Blocked/Error events all implemented.

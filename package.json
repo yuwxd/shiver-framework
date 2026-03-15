@@ -1,0 +1,28 @@
+{
+  "name": "shiver-framework",
+  "version": "1.0.0",
+  "description": "A highly optimized, feature-rich Discord bot framework built on discord.js",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "discord.js": "^14.25.1"
+  },
+  "dependencies": {
+    "discord.js": "^14.25.1"
+  },
+  "optionalDependencies": {
+    "@discordjs/voice": "^0.17.0",
+    "prism-media": "^1.3.5"
+  },
+  "keywords": ["discord", "bot", "framework", "discord.js"],
+  "license": "MIT",
+  "bin": {
+    "shiver-framework": "./src/cli/index.js"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./src/*": "./src/*"
+  }
+}
