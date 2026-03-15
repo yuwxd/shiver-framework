@@ -6,6 +6,10 @@
 
 **A high-performance, infrastructure-first Discord bot framework built on [discord.js](https://discord.js.org/) v14.**
 
+**Full documentation (web):** [shiver.one/framework](https://shiver.one/framework)
+
+Shiver Framework powers **[Shiver](https://shiver.one)** — the same framework the Shiver bot is built on. It was created to make it easy for other developers to build their own Discord bots with the same solid foundation: command loading, slash and prefix, middleware, storage, and production-ready defaults. You get full control over your bot logic while the framework handles infrastructure, safety, and performance.
+
 Shiver Framework gives you the **foundation**—command loading and dispatch, slash and prefix handling, middleware, storage, settings, health endpoints, and safe response handling—without imposing a specific bot design. You keep full control over discord.js types and your app logic; the framework stays a thin, predictable layer optimized for speed and production.
 
 ---
@@ -188,7 +192,10 @@ Run from a project that depends on the framework (or from the framework director
 
 ## Documentation
 
-The **full reference** is in **[docs/DOCS.md](docs/DOCS.md)**. It covers:
+- **Full documentation (web):** [**shiver.one/framework**](https://shiver.one/framework) — readable in the browser, same content as this README and the in-repo reference. Use the web docs or the repo; both are kept in sync.
+- **In-repo reference:** [docs/DOCS.md](docs/DOCS.md) — full option reference and detailed guides.
+
+Both cover:
 
 - Configuration and all options  
 - Command system (registry, slash, prefix, context menu, autocomplete, component handlers)  
