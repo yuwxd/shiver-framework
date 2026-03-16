@@ -6,11 +6,32 @@ const DEFAULT_COLORS = {
     error: 0xED4245,
     warning: 0xFEE75C,
     info: 0x5865F2,
-    premium: 0xFFD700,
     blurple: 0x5865F2,
     fuchsia: 0xEB459E,
     white: 0xFFFFFF,
     black: 0x000000
+};
+
+const NAMED_COLORS = {
+    default: DEFAULT_COLORS.default,
+    success: DEFAULT_COLORS.success,
+    error: DEFAULT_COLORS.error,
+    warning: DEFAULT_COLORS.warning,
+    info: DEFAULT_COLORS.info,
+    blurple: DEFAULT_COLORS.blurple,
+    fuchsia: DEFAULT_COLORS.fuchsia,
+    white: DEFAULT_COLORS.white,
+    black: DEFAULT_COLORS.black,
+    red: 0xFF0000,
+    green: 0x00FF00,
+    blue: 0x0000FF,
+    yellow: 0xFFFF00,
+    orange: 0xFFA500,
+    purple: 0x800080,
+    cyan: 0x00FFFF,
+    magenta: 0xFF00FF,
+    gray: 0x808080,
+    grey: 0x808080
 };
 
 class EmbedHelper {
@@ -143,6 +164,37 @@ class EmbedHelper {
         return { ...DEFAULT_COLORS };
     }
 
+    parseUserColor(input) {
+        if (input === undefined || input === null) return null;
+        const raw = String(input).trim();
+        if (!raw) return null;
+        const lower = raw.toLowerCase();
+
+        if (/^#?[0-9a-f]{3}$/i.test(raw) || /^#?[0-9a-f]{6}$/i.test(raw)) {
+            const prefixed = raw.startsWith('#') ? raw : `#${raw}`;
+            return this.colorFromHex(prefixed);
+        }
+
+        const rgbMatch =
+            lower.match(/^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/) ||
+            lower.match(/^(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})$/);
+        if (rgbMatch) {
+            const r = Math.max(0, Math.min(255, Number(rgbMatch[1])));
+            const g = Math.max(0, Math.min(255, Number(rgbMatch[2])));
+            const b = Math.max(0, Math.min(255, Number(rgbMatch[3])));
+            if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) {
+                return null;
+            }
+            return (r << 16) | (g << 8) | b;
+        }
+
+        if (NAMED_COLORS[lower] !== undefined) {
+            return NAMED_COLORS[lower];
+        }
+
+        return null;
+    }
+
     invalidateCache(userId) {
         for (const key of [...this._cache.keys()]) {
             if (key.startsWith(`${userId}:`)) this._cache.delete(key);
@@ -150,4 +202,4 @@ class EmbedHelper {
     }
 }
 
-module.exports = { EmbedHelper, DEFAULT_COLORS };
+module.exports = { EmbedHelper, DEFAULT_COLORS, NAMED_COLORS };

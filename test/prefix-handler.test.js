@@ -15,7 +15,9 @@ function createFramework(options = {}) {
         events: {
             async emit() {}
         },
-        _prefixProcessedIds: new Set()
+        _prefixProcessedIds: new Set(),
+        _executingNow: new Set(),
+        _prefixRunAtByMessageId: new Map()
     };
 }
 
