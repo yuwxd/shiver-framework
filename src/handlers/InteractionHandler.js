@@ -112,6 +112,7 @@ class InteractionHandler {
                 } catch (err) {
                     safeError('InteractionHandler', err);
                     await this._framework.events.emit('CommandError', { interaction, commandName: `${command.name}.${handlerName}`, error: err, traceId });
+                    if (interaction.replied || interaction.deferred) return;
                     const helpers = container?.get?.('helpers');
                     const payload = helpers?.createGenericErrorPayload
                         ? helpers.createGenericErrorPayload(interaction.user?.id)

@@ -200,7 +200,9 @@ class PrefixHandler {
                 await command.executePrefix(message, args, client, commandName);
                 await this._framework.events.emit('CommandRun', { message, commandName: command.name, traceId });
                 if (typeof options?.onCommandRun === 'function') {
-                    Promise.resolve(options.onCommandRun(message, command.name)).catch(() => {});
+                    try {
+                        await Promise.resolve(options.onCommandRun(message, command.name)).catch(() => {});
+                    } catch (_) {}
                 }
             } catch (err) {
                 if (!options?.suppressSlashHandlerConsoleErrors) {

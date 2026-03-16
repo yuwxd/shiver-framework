@@ -128,7 +128,9 @@ class SlashHandler {
                 await command.executeSlash(interaction, client);
                 await this._framework.events.emit('CommandRun', { interaction, commandName: interaction.commandName, traceId });
                 if (typeof options?.onCommandRun === 'function') {
-                    Promise.resolve(options.onCommandRun(interaction, interaction.commandName)).catch(() => {});
+                    try {
+                        await Promise.resolve(options.onCommandRun(interaction, interaction.commandName)).catch(() => {});
+                    } catch (_) {}
                 }
             } catch (err) {
                 if (!options?.suppressSlashHandlerConsoleErrors) {
@@ -138,6 +140,7 @@ class SlashHandler {
                 if (typeof options?.onCommandError === 'function') {
                     Promise.resolve(options.onCommandError(interaction, interaction.commandName, err)).catch(() => {});
                 }
+                if (interaction.replied || interaction.deferred) return;
                 const helpers = container?.get?.('helpers');
                 const payload = helpers?.createGenericErrorPayload
                     ? helpers.createGenericErrorPayload(interaction.user?.id)
@@ -158,11 +161,13 @@ class SlashHandler {
             if (!options?.suppressSlashHandlerConsoleErrors) {
                 safeError('SlashHandler', err);
             }
-            const helpers = container?.get?.('helpers');
-            const payload = helpers?.createGenericErrorPayload
-                ? helpers.createGenericErrorPayload(interaction.user?.id)
-                : { content: 'This command is currently unavailable. Please try again later.', ephemeral: true };
-            await safeRespond(interaction, payload, options);
+            if (!interaction.replied && !interaction.deferred) {
+                const helpers = container?.get?.('helpers');
+                const payload = helpers?.createGenericErrorPayload
+                    ? helpers.createGenericErrorPayload(interaction.user?.id)
+                    : { content: 'This command is currently unavailable. Please try again later.', ephemeral: true };
+                await safeRespond(interaction, payload, options);
+            }
         }
         return true;
     }
