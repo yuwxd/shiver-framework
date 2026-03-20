@@ -92,12 +92,6 @@ class InteractionHandler {
         const commands = this._registry.getAllSlash();
         const explicitMatches = commands.filter((command) => matchesExplicitComponentTarget(command, interaction, customId));
 
-        if (explicitMatches.length > 0 && (interactionType === 'button' || interactionType === 'select') && !interaction.deferred && !interaction.replied) {
-            try {
-                await interaction.deferUpdate();
-            } catch (_) {}
-        }
-
         for (const command of explicitMatches) {
             for (const handlerName of allHandlers) {
                 if (typeof command[handlerName] !== 'function') continue;
