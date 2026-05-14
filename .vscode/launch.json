@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Shiver dev",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/nodemon/bin/nodemon.js",
+            "args": ["src/index.js"],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "NODE_OPTIONS": ""
+            },
+            "console": "integratedTerminal"
+        }
+    ]
+}
